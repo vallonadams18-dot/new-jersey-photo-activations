@@ -92,8 +92,8 @@ export const guides: Guide[] = [
     excerpt:
       "Why two quotes for 'a photo booth' can differ by a factor of three, and which of the variables are worth paying for.",
     heroImg: {
-      src: "/img/hero-gold-wall.jpg",
-      alt: "Guests photographed against a textured backdrop at an event",
+      src: "/img/studio-booth-hero.jpg",
+      alt: "On-site studio portrait setup with professional lighting",
     },
     body: [
       {

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { AlertCircle, ArrowRight, Loader2 } from "lucide-react";
 import { SITE } from "@/lib/site";
 
 const EVENT_TYPES = [
@@ -66,8 +66,35 @@ interface FieldErrors {
 const inputClass =
   "w-full rounded-sharp border border-ivory/15 bg-charcoal px-4 py-3 text-[15px] text-ivory placeholder:text-mute/50 transition-colors focus:border-champagne focus:outline-none focus:ring-1 focus:ring-champagne/40";
 const labelClass =
-  "block font-sans text-[11px] font-medium uppercase tracking-[0.16em] text-mute";
-const errorClass = "mt-1.5 text-[13px] text-[#e08a6d]";
+  "block font-sans text-[12px] font-medium uppercase tracking-[0.14em] text-ivory/80";
+/**
+ * Error state.
+ *
+ * A dark, restrained palette makes it very easy for validation to whisper. It
+ * should not: an unnoticed error is a lost enquiry. So an invalid field gets a
+ * solid red-coral border and a tinted fill, and the message below it is larger
+ * than the label, weighted, and carries an icon. #FF9E80 measures well above
+ * WCAG AA on both charcoal and obsidian.
+ */
+const errorInputClass =
+  "border-[#ff9e80] bg-[#ff9e80]/10 focus:border-[#ff9e80] focus:ring-2 focus:ring-[#ff9e80]/40";
+
+/** Input classes for a field, switching to the error treatment when invalid. */
+const field = (invalid: boolean) =>
+  `${inputClass} mt-2.5 ${invalid ? errorInputClass : ""}`;
+
+function FieldError({ id, children }: { id: string; children?: string }) {
+  if (!children) return null;
+  return (
+    <p
+      id={id}
+      className="mt-2 flex items-start gap-2 text-[14px] font-medium leading-snug text-[#ff9e80]"
+    >
+      <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+      <span>{children}</span>
+    </p>
+  );
+}
 
 /** Attribution captured on first paint so it survives in-site navigation. */
 function readAttribution() {
@@ -230,15 +257,11 @@ export function QuoteForm() {
             name="name"
             type="text"
             autoComplete="name"
-            className={`${inputClass} mt-2.5`}
+            className={field(!!errors.name)}
             aria-invalid={!!errors.name}
             aria-describedby={errors.name ? "name-error" : undefined}
           />
-          {errors.name && (
-            <p id="name-error" className={errorClass}>
-              {errors.name}
-            </p>
-          )}
+          <FieldError id="name-error">{errors.name}</FieldError>
         </div>
 
         <div>
@@ -250,7 +273,7 @@ export function QuoteForm() {
             name="company"
             type="text"
             autoComplete="organization"
-            className={`${inputClass} mt-2.5`}
+            className={field(false)}
           />
         </div>
 
@@ -263,15 +286,11 @@ export function QuoteForm() {
             name="email"
             type="email"
             autoComplete="email"
-            className={`${inputClass} mt-2.5`}
+            className={field(!!errors.email)}
             aria-invalid={!!errors.email}
             aria-describedby={errors.email ? "email-error" : undefined}
           />
-          {errors.email && (
-            <p id="email-error" className={errorClass}>
-              {errors.email}
-            </p>
-          )}
+          <FieldError id="email-error">{errors.email}</FieldError>
         </div>
 
         <div>
@@ -283,15 +302,11 @@ export function QuoteForm() {
             name="phone"
             type="tel"
             autoComplete="tel"
-            className={`${inputClass} mt-2.5`}
+            className={field(!!errors.phone)}
             aria-invalid={!!errors.phone}
             aria-describedby={errors.phone ? "phone-error" : undefined}
           />
-          {errors.phone && (
-            <p id="phone-error" className={errorClass}>
-              {errors.phone}
-            </p>
-          )}
+          <FieldError id="phone-error">{errors.phone}</FieldError>
         </div>
 
         <div>
@@ -302,22 +317,18 @@ export function QuoteForm() {
             id="eventDate"
             name="eventDate"
             type="date"
-            className={`${inputClass} mt-2.5`}
+            className={field(!!errors.eventDate)}
             aria-invalid={!!errors.eventDate}
             aria-describedby={errors.eventDate ? "eventDate-error" : undefined}
           />
-          {errors.eventDate && (
-            <p id="eventDate-error" className={errorClass}>
-              {errors.eventDate}
-            </p>
-          )}
+          <FieldError id="eventDate-error">{errors.eventDate}</FieldError>
         </div>
 
         <div>
           <label htmlFor="eventType" className={labelClass}>
             Event type
           </label>
-          <select id="eventType" name="eventType" className={`${inputClass} mt-2.5`}>
+          <select id="eventType" name="eventType" className={field(false)}>
             {EVENT_TYPES.map((t) => (
               <option key={t}>{t}</option>
             ))}
@@ -328,7 +339,7 @@ export function QuoteForm() {
           <label htmlFor="county" className={labelClass}>
             Where in New Jersey
           </label>
-          <select id="county" name="county" className={`${inputClass} mt-2.5`}>
+          <select id="county" name="county" className={field(false)}>
             {COUNTIES.map((c) => (
               <option key={c}>{c}</option>
             ))}
@@ -345,22 +356,18 @@ export function QuoteForm() {
             type="text"
             inputMode="numeric"
             autoComplete="postal-code"
-            className={`${inputClass} mt-2.5`}
+            className={field(!!errors.venueZip)}
             aria-invalid={!!errors.venueZip}
             aria-describedby={errors.venueZip ? "venueZip-error" : undefined}
           />
-          {errors.venueZip && (
-            <p id="venueZip-error" className={errorClass}>
-              {errors.venueZip}
-            </p>
-          )}
+          <FieldError id="venueZip-error">{errors.venueZip}</FieldError>
         </div>
 
         <div>
           <label htmlFor="experience" className={labelClass}>
             Experience you have in mind
           </label>
-          <select id="experience" name="experience" className={`${inputClass} mt-2.5`}>
+          <select id="experience" name="experience" className={field(false)}>
             {EXPERIENCES.map((b) => (
               <option key={b}>{b}</option>
             ))}
@@ -376,7 +383,7 @@ export function QuoteForm() {
             name="guestCount"
             type="number"
             min={1}
-            className={`${inputClass} mt-2.5`}
+            className={field(false)}
           />
         </div>
       </div>
@@ -389,7 +396,7 @@ export function QuoteForm() {
           id="message"
           name="message"
           rows={4}
-          className={`${inputClass} mt-2.5`}
+          className={field(false)}
           placeholder="Venue name, timings, branding requirements, whether the venue needs a certificate of insurance — whatever helps."
         />
       </div>
@@ -400,14 +407,17 @@ export function QuoteForm() {
             ref={statusRef}
             role="alert"
             tabIndex={-1}
-            className="rounded-sharp border border-[#e08a6d]/40 bg-[#e08a6d]/10 px-4 py-3 text-[14px] text-[#e8a68d]"
+            className="flex items-start gap-3 rounded-sharp border-2 border-[#ff9e80] bg-[#ff9e80]/12 px-4 py-4 text-[15px] font-medium leading-snug text-[#ff9e80]"
           >
+            <AlertCircle className="mt-0.5 size-5 shrink-0" aria-hidden="true" />
+            <span>
             Something went wrong and your message was not delivered. Please try
             again, or email us directly at{" "}
             <a href={`mailto:${SITE.email}`} className="font-medium underline">
               {SITE.email}
             </a>
             .
+            </span>
           </p>
         )}
       </div>

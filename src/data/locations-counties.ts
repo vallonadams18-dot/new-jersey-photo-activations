@@ -105,8 +105,8 @@ export const locationCounties: Location[] = [
     heroSub:
       "The West Orange estate cluster gives Essex County the grandest run of wedding venues in the state, with Montclair's independent scene and Newark's institutions at either end of it.",
     heroImg: {
-      src: "/img/glam-booth-hero.jpg",
-      alt: "Black and white glam booth portrait at a formal event",
+      src: "/img/mirror-booth-hero.jpg",
+      alt: "Full length mirror photo booth at a formal event",
     },
     intro: {
       heading: "Three miles of estate venues, and everything around them",

@@ -24,8 +24,8 @@ export const locationCities: Location[] = [
     heroSub:
       "The waterfront gives you the Manhattan skyline as a backdrop for nothing. We plan the booth around it — and around the freight elevator schedules that decide when anything gets into an Exchange Place tower.",
     heroImg: {
-      src: "/img/home-crowd.jpg",
-      alt: "Guests gathered around a photo booth at an evening reception",
+      src: "/img/corporate-hero.jpg",
+      alt: "Photo booth at a corporate event reception",
     },
     intro: {
       heading: "Two different cities, depending on the block",
@@ -267,8 +267,8 @@ export const locationCities: Location[] = [
     heroSub:
       "A university calendar, a pharmaceutical corridor and a set of venues with genuine architectural constraints. Princeton rewards planning further ahead than anywhere else we work.",
     heroImg: {
-      src: "/img/hero-gold-wall.jpg",
-      alt: "Guests photographed against a textured gold backdrop",
+      src: "/img/champagne-wall-hero.jpg",
+      alt: "Champagne wall styled for an event reception",
     },
     intro: {
       heading: "Three calendars, one town",

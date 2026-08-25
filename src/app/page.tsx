@@ -42,8 +42,8 @@ export default function HomePage() {
       <section className="relative overflow-hidden bg-obsidian">
         <div className="absolute inset-0">
           <Image
-            src="/img/hero-gold-wall.jpg"
-            alt="Guests photographed against a gold textured wall at an evening event"
+            src="/img/champagne-wall-hero.jpg"
+            alt="Champagne wall styled for an evening event reception"
             fill
             priority
             sizes="100vw"

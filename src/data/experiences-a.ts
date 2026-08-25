@@ -130,8 +130,8 @@ export const experiencesA: Experience[] = [
     heroSub:
       "A portrait taken in your venue, restyled in seconds into a look you designed in advance. It is the experience that produces the longest queue and the most shares of anything we run.",
     heroImg: {
-      src: "/img/ai-booth-hero-2.jpg",
-      alt: "Guest viewing an AI-restyled portrait at an event photo booth",
+      src: "/img/ai-booth-13.jpg",
+      alt: "AI-restyled portrait produced at an event",
     },
     weight: "corporate",
     included: [
@@ -219,8 +219,8 @@ export const experiencesA: Experience[] = [
     heroSub:
       "The shot you have seen on the Met Gala carpet and at the Oscars after-party. A robotic arm sweeps a cinema camera past your guests in high-frame-rate slow motion, and hands them back four seconds of film.",
     heroImg: {
-      src: "/img/glambot-hero-2.jpg",
-      alt: "Robotic camera arm capturing a slow-motion Glambot video at an event",
+      src: "/img/glambot-3.jpg",
+      alt: "Robotic camera arm capturing a slow-motion sweep at an evening event",
     },
     weight: "corporate",
     included: [
@@ -664,8 +664,8 @@ export const experiencesA: Experience[] = [
     heroSub:
       "A booth with no fixed backdrop, because the backdrop is whatever you decide it is. Guests are composited live into environments we design with you before the event.",
     heroImg: {
-      src: "/img/green-screen-hero-2.webp",
-      alt: "Green screen photo booth compositing guests into a custom background",
+      src: "/img/trade-show-3.jpg",
+      alt: "Attendees at a branded photo experience on an exhibition floor",
     },
     weight: "corporate",
     included: [

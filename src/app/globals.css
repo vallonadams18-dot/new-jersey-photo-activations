@@ -18,7 +18,11 @@
      on obsidian it is 8.75:1. Hence the rule — gold text on dark grounds only. */
   --color-champagne-deep: #8a6a32;
   --color-ivory: #f7f3ea;
-  --color-mute: #a7a7ac;
+  /* Secondary text across the whole site — section subheadings, body prose,
+     footer links, card copy. Lifted from #A7A7AC (8.2:1 on obsidian) to
+     #BEBEC4 (10.7:1): the old value passed AA but read as faint at body size
+     against this much black. */
+  --color-mute: #bebec4;
 
   --font-sans: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;

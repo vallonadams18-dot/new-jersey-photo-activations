@@ -1,0 +1,162 @@
+{
+  "360-booth-1.jpg": {
+    "originalHeight": 675,
+    "croppedHeight": 567,
+    "removed": "16%"
+  },
+  "360-booth-2.jpg": {
+    "originalHeight": 800,
+    "croppedHeight": 672,
+    "removed": "16%"
+  },
+  "360-booth-3.jpg": {
+    "originalHeight": 900,
+    "croppedHeight": 756,
+    "removed": "16%"
+  },
+  "360-booth-5.jpg": {
+    "originalHeight": 1067,
+    "croppedHeight": 896,
+    "removed": "16%"
+  },
+  "360-booth-hero.jpg": {
+    "originalHeight": 1200,
+    "croppedHeight": 1008,
+    "removed": "16%"
+  },
+  "3d-slider-1.jpg": {
+    "originalHeight": 667,
+    "croppedHeight": 560,
+    "removed": "16%"
+  },
+  "3d-slider-2.jpg": {
+    "originalHeight": 667,
+    "croppedHeight": 560,
+    "removed": "16%"
+  },
+  "3d-slider-3.jpg": {
+    "originalHeight": 1000,
+    "croppedHeight": 840,
+    "removed": "16%"
+  },
+  "3d-slider-hero.jpg": {
+    "originalHeight": 1709,
+    "croppedHeight": 1265,
+    "removed": "26%"
+  },
+  "brand-activation-dropbox.jpg": {
+    "originalHeight": 2904,
+    "croppedHeight": 2439,
+    "removed": "16%"
+  },
+  "branded-30.jpg": {
+    "originalHeight": 1068,
+    "croppedHeight": 897,
+    "removed": "16%"
+  },
+  "branded-hero-2.jpg": {
+    "originalHeight": 1067,
+    "croppedHeight": 896,
+    "removed": "16%"
+  },
+  "corporate-confetti.jpg": {
+    "originalHeight": 3162,
+    "croppedHeight": 2656,
+    "removed": "16%"
+  },
+  "corporate-hero.jpg": {
+    "originalHeight": 1202,
+    "croppedHeight": 1010,
+    "removed": "16%"
+  },
+  "corporate-instant-sharing.jpg": {
+    "originalHeight": 3162,
+    "croppedHeight": 2656,
+    "removed": "16%"
+  },
+  "corporate-vogue-session.jpg": {
+    "originalHeight": 3354,
+    "croppedHeight": 2817,
+    "removed": "16%"
+  },
+  "gif-booth-1.webp": {
+    "originalHeight": 1280,
+    "croppedHeight": 1075,
+    "removed": "16%"
+  },
+  "home-crowd.jpg": {
+    "originalHeight": 933,
+    "croppedHeight": 784,
+    "removed": "16%"
+  },
+  "mirror-booth-2.jpg": {
+    "originalHeight": 800,
+    "croppedHeight": 672,
+    "removed": "16%"
+  },
+  "mirror-x-3.jpg": {
+    "originalHeight": 1400,
+    "croppedHeight": 1176,
+    "removed": "16%"
+  },
+  "mosaic-1.jpg": {
+    "originalHeight": 800,
+    "croppedHeight": 672,
+    "removed": "16%"
+  },
+  "roamer-1.jpg": {
+    "originalHeight": 800,
+    "croppedHeight": 672,
+    "removed": "16%"
+  },
+  "roamer-4.jpg": {
+    "originalHeight": 1067,
+    "croppedHeight": 896,
+    "removed": "16%"
+  },
+  "roamer-7.jpg": {
+    "originalHeight": 1067,
+    "croppedHeight": 896,
+    "removed": "16%"
+  },
+  "roamer-8.jpg": {
+    "originalHeight": 1067,
+    "croppedHeight": 896,
+    "removed": "16%"
+  },
+  "roamer-10.jpg": {
+    "originalHeight": 1067,
+    "croppedHeight": 896,
+    "removed": "16%"
+  },
+  "roamer-hero-2.jpg": {
+    "originalHeight": 1067,
+    "croppedHeight": 896,
+    "removed": "16%"
+  },
+  "vogue-booth-1.jpg": {
+    "originalHeight": 800,
+    "croppedHeight": 672,
+    "removed": "16%"
+  },
+  "vogue-booth-2.jpg": {
+    "originalHeight": 900,
+    "croppedHeight": 756,
+    "removed": "16%"
+  },
+  "vogue-booth-3.jpg": {
+    "originalHeight": 800,
+    "croppedHeight": 672,
+    "removed": "16%"
+  },
+  "vogue-booth-hero.jpg": {
+    "originalHeight": 1200,
+    "croppedHeight": 1008,
+    "removed": "16%"
+  },
+  "wedding-hero.jpg": {
+    "originalHeight": 1200,
+    "croppedHeight": 1008,
+    "removed": "16%"
+  }
+}

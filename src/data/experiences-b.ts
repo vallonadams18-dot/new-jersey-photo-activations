@@ -113,8 +113,8 @@ export const experiencesB: Experience[] = [
     heroSub:
       "The high-key black-and-white treatment you know from the red carpet — soft skin, bright eyes, deep contrast. It is the booth guests photograph best in, by a distance.",
     heroImg: {
-      src: "/img/glam-booth-hero.jpg",
-      alt: "Black and white glam booth portrait at an event",
+      src: "/img/wedding-booth-1.jpg",
+      alt: "Guests photographed at a formal evening reception",
     },
     weight: "both",
     included: [
@@ -366,8 +366,8 @@ export const experiencesB: Experience[] = [
     heroSub:
       "Four frames, one loop, and something guests can post immediately. It is the fastest interaction we run and the one that produces the most social volume per hour.",
     heroImg: {
-      src: "/img/gif-booth-hero-4.gif",
-      alt: "Animated GIF photo booth loop of guests at an event",
+      src: "/img/gif-booth-1.webp",
+      alt: "Guests mid-movement in a GIF booth capture",
     },
     weight: "both",
     included: [
