@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "prebuild": "node scripts/build-image-variants.mjs"
+    "prebuild": "node scripts/fix-logo-transparency.mjs && node scripts/build-image-variants.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.33.0",

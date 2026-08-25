@@ -1,7 +1,10 @@
+import { Fragment } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { Experience } from "@/data/types";
 import { resolveExperiences } from "@/data";
+import { experienceInline } from "@/data/experience-inline";
 import { NAV_LOCATIONS } from "@/lib/site";
 import {
   breadcrumbJsonLd,
@@ -21,6 +24,9 @@ import { VideoPlayer } from "@/components/VideoPlayer";
 export function ExperiencePage({ experience }: { experience: Experience }) {
   const related = resolveExperiences(experience.related);
   const path = `/experiences/${experience.slug}`;
+  // Falls back to an empty list rather than throwing if a new experience is
+  // added before its inline photography is chosen.
+  const inline = experienceInline[experience.slug] ?? [];
 
   return (
     <>
@@ -64,10 +70,34 @@ export function ExperiencePage({ experience }: { experience: Experience }) {
         </dl>
       </section>
 
-      {/* Story + what's included */}
+      {/* Story + what's included.
+
+          The prose blocks are interleaved with photography rather than left as
+          an unbroken run of text on a dark ground. These images are separate
+          from the gallery grid further down, so the page does not repeat
+          itself. */}
       <section className="cv-auto bg-obsidian px-5 py-24 sm:px-8 sm:py-28 lg:px-10">
         <div className="mx-auto grid max-w-[86rem] gap-14 lg:grid-cols-[1.25fr_0.75fr] lg:gap-20">
-          <Prose blocks={experience.prose} />
+          <div className="flex min-w-0 flex-col gap-14">
+            {experience.prose.map((block, i) => (
+              <Fragment key={block.heading}>
+                <Prose blocks={[block]} />
+                {inline[i] && (
+                  <figure className="group relative aspect-[3/2] overflow-hidden rounded-sharp border border-ivory/10">
+                    <Image
+                      src={inline[i].src}
+                      alt={inline[i].alt}
+                      fill
+                      loading="lazy"
+                      sizes="(max-width: 1024px) 100vw, 55vw"
+                      className="object-cover transition-transform duration-[1100ms] ease-out group-hover:scale-[1.03]"
+                    />
+                  </figure>
+                )}
+              </Fragment>
+            ))}
+          </div>
+
           <aside className="lg:sticky lg:top-28 lg:self-start">
             <div className="rounded-sharp border border-champagne/20 bg-charcoal p-8">
               <p className="eyebrow text-champagne">What is included</p>
