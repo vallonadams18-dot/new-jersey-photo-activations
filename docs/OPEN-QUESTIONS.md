@@ -43,16 +43,27 @@ CheckCherry one does not.
 
 ---
 
-## 3. Email address and phone number
+## 3. Email — set. Phone still open.
 
-**Placeholders in use:** `hello@mirrormebrooklyn.com` and `(917) 724-6051`.
+**Email:** `newjerseyphotoactivations@gmail.com`, set 25 Aug 2026. It appears in
+the footer, on Contact, in the Organization schema, and is the fallback
+destination for the quote form.
 
-Both are correct today — same business, same people. But a New Jersey brand with
-a Brooklyn-facing email address undercuts the positioning slightly, and a
-separate number would let you attribute calls.
+> **One action needed before the form delivers anything.** With no Cloudflare
+> Worker or CRM webhook configured, the quote form posts to FormSubmit at
+> `formsubmit.co/ajax/newjerseyphotoactivations@gmail.com`. FormSubmit requires
+> a one-time confirmation of any new address: **the first submission sends an
+> activation email to that inbox, and nothing is delivered until you click the
+> link in it.** Submit the form once yourself and confirm, or enquiries will
+> vanish silently. Worth testing end to end either way.
 
-**Needed:** do you want `hello@newjerseyphotoactivations.com` (or similar) and a
-dedicated NJ tracking number? Both are one-line changes in `site.ts`.
+A Gmail address rather than one on the domain is the right call for now — the
+domain's SPF record is `v=spf1 -all`, so it cannot send mail at all until that
+changes.
+
+**Phone still open.** Currently `(917) 724-6051` — the parent business's number.
+Correct, but a dedicated New Jersey number would let you attribute calls to this
+site. One line in `site.ts` whenever you have one.
 
 ---
 

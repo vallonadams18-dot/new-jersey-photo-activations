@@ -19,7 +19,17 @@ export const SITE = {
   url:
     process.env.NEXT_PUBLIC_SITE_URL ||
     "https://www.newjerseyphotoactivations.com",
-  email: process.env.NEXT_PUBLIC_SITE_EMAIL || "hello@mirrormebrooklyn.com",
+  /**
+   * The public contact address. Also the fallback destination for the quote
+   * form (see QuoteForm) when no Worker or CRM webhook is configured.
+   *
+   * Note this is a Gmail address, not an address on this domain — which is
+   * deliberate and, for now, necessary: the domain's SPF record is
+   * `v=spf1 -all`, declaring that it sends no mail at all. See
+   * docs/DOMAIN-SETUP.md.
+   */
+  email:
+    process.env.NEXT_PUBLIC_SITE_EMAIL || "newjerseyphotoactivations@gmail.com",
   phone: "(917) 724-6051",
   phoneHref: "tel:+19177246051",
   instagram: "https://www.instagram.com/magicmirrorbk/",
