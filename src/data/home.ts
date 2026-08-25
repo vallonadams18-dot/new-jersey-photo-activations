@@ -10,14 +10,22 @@ export const FEATURED_SLUGS = [
   "studio-booth",
 ] as const;
 
-/** Real client logos from the portfolio. Nothing here is invented. */
+/**
+ * Real client logos from the portfolio. Nothing here is invented.
+ *
+ * Hilton is deliberately absent. Its source PNG is black artwork on an opaque
+ * black field, so there is no background to separate from the mark — the row's
+ * `brightness-0 invert` treatment turns the whole rectangle into a solid white
+ * block, and stripping the background erases the logo entirely.
+ * `scripts/fix-logo-transparency.mjs` detects and reports this. Drop in a
+ * transparent Hilton PNG and it can go straight back into this list.
+ */
 export const brandLogos = [
   { src: "/img/logos/google-cloud.png", alt: "Google Cloud" },
   { src: "/img/logos/adidas.png", alt: "adidas" },
   { src: "/img/logos/servicenow.png", alt: "ServiceNow" },
   { src: "/img/logos/figma.png", alt: "Figma" },
   { src: "/img/logos/macys.png", alt: "Macy's" },
-  { src: "/img/logos/hilton.png", alt: "Hilton" },
   { src: "/img/logos/hellmanns.png", alt: "Hellmann's" },
   { src: "/img/logos/prabal-gurung.png", alt: "Prabal Gurung" },
   { src: "/img/logos/sexyhair.png", alt: "SexyHair" },
