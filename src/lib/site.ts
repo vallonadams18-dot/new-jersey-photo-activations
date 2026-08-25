@@ -9,6 +9,13 @@
 export const SITE = {
   name: "New Jersey Photo Activations",
   legalName: "New Jersey Photo Activations",
+  /**
+   * The live domain. Confirmed registered 25 Aug 2026, currently on Squarespace
+   * nameservers — see docs/DOMAIN-SETUP.md for the DNS change that points it here.
+   *
+   * The env var wins in CI so the domain can be changed without a code deploy;
+   * this literal is the local-dev and fallback value.
+   */
   url:
     process.env.NEXT_PUBLIC_SITE_URL ||
     "https://www.newjerseyphotoactivations.com",

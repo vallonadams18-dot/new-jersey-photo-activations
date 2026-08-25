@@ -7,17 +7,22 @@ Ordered by how much it costs to leave unanswered.
 
 ---
 
-## 1. The domain, exactly
+## 1. ~~The domain~~ — DONE, 25 Aug 2026
 
-**Placeholder in use:** `https://www.newjerseyphotoactivations.com`
+**Live at [https://www.newjerseyphotoactivations.com](https://www.newjerseyphotoactivations.com).**
 
-Nothing is hard-coded. Every canonical, Open Graph tag, sitemap entry and schema
-`@id` reads `SITE.url` in [`src/lib/site.ts`](../src/lib/site.ts), which reads
-`NEXT_PUBLIC_SITE_URL`. Setting the real domain is one environment variable, or
-one line in that file.
+DNS moved off Squarespace hosting onto GitHub Pages, custom domain set, HTTPS
+enforced, apex 301s to `www`. Full record of what changed in
+[`DOMAIN-SETUP.md`](DOMAIN-SETUP.md).
 
-**Needed:** is it `.com`? Is it registered? Once you confirm, I set the variable,
-add the `CNAME` file and point the Pages deployment at it.
+Two follow-ups it raised:
+
+- The Squarespace "Coming Soon" placeholder is gone. **If a Squarespace website
+  subscription is attached to this domain, cancel it separately** — DNS changes
+  do not stop billing.
+- `TXT @` is `v=spf1 -all`, so this domain currently sends **no** email. Fine for
+  a website; must change before `hello@newjerseyphotoactivations.com` could send
+  anything. See item 3.
 
 ---
 
@@ -128,14 +133,18 @@ and entirely yours. I will not invent one to shortcut it.
 
 ---
 
-## 9. Analytics and Search Console
+## 9. Analytics and Search Console — now unblocked
 
 **Currently:** the quote form fires a `generate_lead` event if `gtag` is present,
 but no analytics property is installed and no Search Console verification token
 is set.
 
-**Needed:** once the domain is live — a GA4 property ID and a Search Console
-verification token. Both drop into `layout.tsx` in a minute.
+The domain is live, so this is the highest-value remaining item: until the
+sitemap is submitted, Google has no particular reason to crawl a brand-new
+domain quickly.
+
+**Needed:** a GA4 property ID and a Search Console verification token. Both drop
+into `layout.tsx` in a minute. Then submit `/sitemap.xml` — 52 URLs.
 
 ---
 
