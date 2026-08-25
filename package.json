@@ -11,6 +11,7 @@
     "check:images": "node scripts/check-image-quality.mjs"
   },
   "dependencies": {
+    "@next/third-parties": "^16.3.2",
     "lucide-react": "^1.33.0",
     "next": "16.3.1",
     "react": "19.2.8",

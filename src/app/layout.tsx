@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Jost } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
@@ -77,6 +78,9 @@ export default function RootLayout({
         <Footer />
         <JsonLd data={organizationJsonLd()} />
         <JsonLd data={websiteJsonLd()} />
+        {/* Loaded after hydration by @next/third-parties, so it never blocks
+            the LCP image. Also what lets QuoteForm fire generate_lead. */}
+        <GoogleAnalytics gaId={SITE.gaMeasurementId} />
       </body>
     </html>
   );

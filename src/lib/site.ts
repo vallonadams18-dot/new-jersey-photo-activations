@@ -34,6 +34,17 @@ export const SITE = {
   phoneHref: "tel:+19177246051",
   instagram: "https://www.instagram.com/magicmirrorbk/",
   /**
+   * GA4 property for this domain — separate from the parent business's, so
+   * New Jersey traffic is never mixed into Brooklyn's reporting.
+   *
+   * Loading this is also what makes the quote form's `generate_lead`
+   * conversion event fire: QuoteForm calls `window.gtag` only after a
+   * confirmed 2xx from the lead endpoint, and until now nothing was
+   * listening.
+   */
+  gaMeasurementId:
+    process.env.NEXT_PUBLIC_GA_ID || "G-GLTGV3RLRW",
+  /**
    * Decision 3: this is a distinct brand, so it carries no rating and no
    * review schema of its own. The credibility is borrowed openly and
    * attributed to the parent business rather than claimed here.
