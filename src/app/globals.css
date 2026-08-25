@@ -28,6 +28,8 @@
   --radius-sharp: 2px;
 
   --animate-reveal: reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  /* Slow on purpose. A logo row that hurries reads as a banner ad. */
+  --animate-marquee: marquee 70s linear infinite;
 
   @keyframes reveal {
     0% {
@@ -37,6 +39,18 @@
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  /* The track holds two identical copies of the logo list back to back, so
+     travelling exactly one copy's width (-50%) lands on a frame identical to
+     the start and the loop is seamless. */
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
     }
   }
 }
@@ -150,6 +164,47 @@ h5 {
 .underline-gold:hover,
 .group:hover .underline-gold {
   background-size: 100% 1px;
+}
+
+/* ── Logo marquee ─────────────────────────────────────────────────────── */
+.marquee-track {
+  animation: var(--animate-marquee);
+}
+
+/* Slows rather than stops, so the row never looks frozen or broken. */
+.marquee-mask:hover .marquee-track {
+  animation-duration: 160s;
+}
+
+/* Fades both ends so logos enter and leave instead of being sliced off. */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No motion at all — the row becomes a normal horizontally scrollable
+     list, so every logo is still reachable. */
+  .marquee-track {
+    animation: none !important;
+  }
+  .marquee-mask {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
 }
 
 /* Below-the-fold sections skip layout and paint until scrolled near.
