@@ -48,11 +48,20 @@ export const SITE = {
    * Google Search Console ownership token: the bare `content` value from the
    * HTML-tag verification method, not the whole <meta> element.
    *
-   * Empty renders no tag at all, which is the right default — a blank
-   * verification tag is worse than none. Set it as an Actions variable so the
-   * property can be verified without a code change, exactly like the domain.
+   * Issued 29 Aug 2026 for the URL-prefix property
+   * `https://www.newjerseyphotoactivations.com/`, owned by
+   * hello@mirrormebrooklyn.com — the same account that holds the Flower Walls
+   * New Jersey property and the Business Profile.
+   *
+   * Google keeps checking this tag after verification succeeds, so removing it
+   * silently un-verifies the property. Leave it in place.
+   *
+   * The env var still wins, so the token can be rotated as an Actions variable
+   * without a code change.
    */
-  gscVerification: process.env.NEXT_PUBLIC_GSC_VERIFICATION || "",
+  gscVerification:
+    process.env.NEXT_PUBLIC_GSC_VERIFICATION ||
+    "EWtPCC3ONgcfAu72oZtxJ42G3Kffr6NaF8pAzKRumG8",
   /**
    * Decision 3: this is a distinct brand, so it carries no rating and no
    * review schema of its own. The credibility is borrowed openly and
