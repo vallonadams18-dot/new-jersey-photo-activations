@@ -29,7 +29,8 @@ Two follow-ups it raised:
 ## 2. A CheckCherry contact form for New Jersey
 
 **Placeholder in use:** the site's own quote form, posting to a configurable
-endpoint that currently falls back to a FormSubmit relay to `hello@mirrormebrooklyn.com`.
+endpoint that currently falls back to a FormSubmit relay to
+`newjerseyphotoactivations@gmail.com`, confirmed delivering (see item 3).
 
 The Brooklyn site runs a CheckCherry widget hard-coded to contact form `20601`
 on the `magic-mirror-brooklyn-llc` account. I deliberately did **not** clone
@@ -158,9 +159,14 @@ and entirely yours. I will not invent one to shortcut it.
 **GA4:** property `G-GLTGV3RLRW`, live on every page.
 
 **Search Console:** URL-prefix property `https://www.newjerseyphotoactivations.com/`,
-**ownership verified** by HTML tag, under `hello@mirrormebrooklyn.com` — the
-account that also holds the Flower Walls New Jersey property and the Business
-Profile.
+**ownership verified** by HTML tag.
+
+> **Registered under the wrong Google account.** It was created from the account
+> that happened to be signed in, not `newjerseyphotoactivations@gmail.com`. This
+> brand keeps its own accounts, so the property should move: add the New Jersey
+> address as an owner, confirm it, then remove the other account. The
+> verification token is a property of the site, not the account, so moving
+> ownership does not change it and does not re-trigger verification.
 
 **Sitemap submitted 29 Aug 2026:** `/sitemap.xml`, status *Success*, 52 pages
 discovered on the first read.

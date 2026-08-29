@@ -49,9 +49,11 @@ export const SITE = {
    * HTML-tag verification method, not the whole <meta> element.
    *
    * Issued 29 Aug 2026 for the URL-prefix property
-   * `https://www.newjerseyphotoactivations.com/`, owned by
-   * hello@mirrormebrooklyn.com — the same account that holds the Flower Walls
-   * New Jersey property and the Business Profile.
+   * `https://www.newjerseyphotoactivations.com/`.
+   *
+   * The property should be owned by newjerseyphotoactivations@gmail.com. It was
+   * first registered under a different Google account — see
+   * docs/OPEN-QUESTIONS.md item 9. Moving it does NOT change this token.
    *
    * Google keeps checking this tag after verification succeeds, so removing it
    * silently un-verifies the property. Leave it in place.
