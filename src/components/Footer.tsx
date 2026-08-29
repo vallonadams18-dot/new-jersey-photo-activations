@@ -85,21 +85,6 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col gap-6 border-t border-ivory/8 pt-8">
-          {/* Decision 3: the credibility is borrowed openly and attributed,
-              never claimed as this brand's own rating. */}
-          <p className="max-w-2xl text-[13px] leading-relaxed text-mute">
-            New Jersey Photo Activations is the New Jersey practice of the team
-            behind{" "}
-            <a
-              href={SITE.parent.url}
-              className="text-ivory underline decoration-champagne/40 underline-offset-4 transition-colors hover:text-champagne"
-            >
-              {SITE.parent.name}
-            </a>
-            , rated {SITE.parent.rating} from {SITE.parent.reviewCount} Google
-            reviews.
-          </p>
-
           <div className="flex flex-col gap-4 text-[12px] text-mute/70 sm:flex-row sm:items-center sm:justify-between">
             <p>
               © {new Date().getFullYear()} {SITE.legalName}. All rights reserved.

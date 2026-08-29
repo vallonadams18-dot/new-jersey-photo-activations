@@ -64,18 +64,6 @@ export const SITE = {
   gscVerification:
     process.env.NEXT_PUBLIC_GSC_VERIFICATION ||
     "EWtPCC3ONgcfAu72oZtxJ42G3Kffr6NaF8pAzKRumG8",
-  /**
-   * Decision 3: this is a distinct brand, so it carries no rating and no
-   * review schema of its own. The credibility is borrowed openly and
-   * attributed to the parent business rather than claimed here.
-   */
-  parent: {
-    name: "Magic Mirror Brooklyn",
-    url: "https://www.magicmirrorbrooklyn.com",
-    rating: 4.9,
-    reviewCount: 210,
-    reviewsUrl: "https://maps.google.com/?cid=13389849959803291430",
-  },
   /** Statewide. There is no New Jersey office — see docs/OPEN-QUESTIONS.md. */
   serviceArea: "New Jersey",
 } as const;

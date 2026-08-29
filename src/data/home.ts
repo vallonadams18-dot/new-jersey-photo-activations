@@ -93,6 +93,6 @@ export const homeFaqs: Faq[] = [
   },
   {
     q: "Who is behind New Jersey Photo Activations?",
-    a: "The team behind Magic Mirror Brooklyn, which has run photo and interactive experiences for brands including Google Cloud, adidas, ServiceNow, Macy's and Hellmann's, and is rated 4.9 from 210 Google reviews. This is the New Jersey-focused side of that operation.",
+    a: "A team that has been running photo and interactive experiences for years, for brands including Google Cloud, adidas, ServiceNow, Macy's and Hellmann's. New Jersey Photo Activations is the New Jersey-focused side of that work, with its own team on the ground here.",
   },
 ];

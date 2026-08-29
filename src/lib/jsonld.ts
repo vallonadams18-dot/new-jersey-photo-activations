@@ -10,10 +10,9 @@ type JsonLd = Record<string, unknown>;
  * markup or an invitation to invent an address. `areaServed` states the truth —
  * the whole state is covered, from somewhere else.
  *
- * Also deliberately absent: `aggregateRating`. The 4.9 belongs to the parent
- * business's Google listing, not to this domain. It is credited in the page
- * copy with attribution instead, which is honest; marking it up here would not
- * be, and self-serving review markup risks a manual action either way.
+ * Also deliberately absent: `aggregateRating`. This practice has not earned a
+ * rating of its own yet, and marking up one earned elsewhere would be a lie
+ * about this domain. Self-serving review markup risks a manual action anyway.
  */
 export function organizationJsonLd(): JsonLd {
   return {
@@ -33,11 +32,6 @@ export function organizationJsonLd(): JsonLd {
       "@type": "State",
       name: "New Jersey",
       containedInPlace: { "@type": "Country", name: "United States" },
-    },
-    parentOrganization: {
-      "@type": "Organization",
-      name: SITE.parent.name,
-      url: SITE.parent.url,
     },
     hasOfferCatalog: {
       "@type": "OfferCatalog",

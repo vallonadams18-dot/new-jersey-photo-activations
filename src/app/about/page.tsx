@@ -8,12 +8,11 @@ import { Prose } from "@/components/Prose";
 import { SectionHeading } from "@/components/SectionHeading";
 import { breadcrumbJsonLd } from "@/lib/jsonld";
 import { pageMeta } from "@/lib/metadata";
-import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
   title: "About | New Jersey Photo Activations",
   description:
-    "New Jersey Photo Activations is the New Jersey practice of the team behind Magic Mirror Brooklyn — luxury photo experiences for corporate activations, trade shows and weddings.",
+    "New Jersey Photo Activations delivers luxury photo experiences across New Jersey — corporate activations, trade shows and weddings, with a trained attendant on every booking.",
   path: "/about",
 });
 
@@ -34,7 +33,7 @@ export default function AboutPage() {
               {
                 heading: "Where we come from",
                 paragraphs: [
-                  `New Jersey Photo Activations is the New Jersey practice of the team behind ${SITE.parent.name}, which has been running photo booths and interactive experiences across the New York metropolitan area for years — for Google Cloud, adidas, ServiceNow, Macy's, Hellmann's and Hilton as readily as for couples and families. That business is rated ${SITE.parent.rating} from ${SITE.parent.reviewCount} Google reviews.`,
+                  "New Jersey Photo Activations is a dedicated New Jersey practice, run by a team that has been delivering photo booths and interactive experiences across the New York metropolitan area for years — for Google Cloud, adidas, ServiceNow, Macy's, Hellmann's and Hilton as readily as for couples and families.",
                   "We set this up as a separate practice rather than a service area on someone else's map because New Jersey deserves better than being treated as the place a New York company will travel to. The venues here have their own rules, the counties behave nothing like each other, and a supplier who has not worked out the difference between an Exchange Place freight lift and a Hoboken walk-up will find out on your event day.",
                 ],
               },
@@ -67,21 +66,6 @@ export default function AboutPage() {
                 className="object-cover"
               />
             </div>
-            <div className="rounded-sharp border border-champagne/20 bg-charcoal p-8">
-              <p className="eyebrow text-champagne">The parent business</p>
-              <p className="mt-5 text-[14px] leading-relaxed text-mute">
-                {SITE.parent.name} continues to serve New York City and the
-                wider tri-state area. This site is the New Jersey side of the
-                same operation, with its own focus and its own team on the
-                ground.
-              </p>
-              <a
-                href={SITE.parent.url}
-                className="mt-6 inline-block text-[13px] font-medium uppercase tracking-[0.14em] text-champagne"
-              >
-                <span className="underline-gold">Visit {SITE.parent.name}</span>
-              </a>
-            </div>
           </aside>
         </div>
       </section>
@@ -108,13 +92,12 @@ export default function AboutPage() {
             </div>
             <div className="bg-charcoal p-9">
               <h3 className="font-display text-2xl text-ivory">
-                Borrow reviews that are not ours yet
+                Show a rating we have not earned
               </h3>
               <p className="mt-4 text-[15px] leading-relaxed text-mute">
-                The {SITE.parent.rating}-star rating on this site belongs to{" "}
-                {SITE.parent.name} and is credited to it every time it appears.
-                This practice carries no rating of its own until it has earned
-                one.
+                This site displays no star rating and no review count. This
+                practice has not earned any yet, and numbers earned somewhere
+                else would tell you nothing about the job we would do for you.
               </p>
             </div>
           </div>

@@ -6,7 +6,6 @@ import { PhotoStrip } from "@/components/PhotoGrid";
 import { galleryEvents } from "@/data";
 import { breadcrumbJsonLd, collectionPageJsonLd } from "@/lib/jsonld";
 import { pageMeta } from "@/lib/metadata";
-import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
   title: "Gallery | Brand Activations & Corporate Event Photography",
@@ -31,15 +30,8 @@ export default function GalleryPage() {
         <p className="mx-auto max-w-[86rem] text-[14px] leading-relaxed text-mute">
           <span className="text-champagne">A note on this gallery — </span>
           New Jersey Photo Activations is a new practice, and the work below was
-          delivered by the same team under{" "}
-          <a
-            href={SITE.parent.url}
-            className="text-ivory underline decoration-champagne/40 underline-offset-4 transition-colors hover:text-champagne"
-          >
-            {SITE.parent.name}
-          </a>{" "}
-          at events outside New Jersey. It is our own work, shown to evidence
-          what we do rather than where we have done it.
+          delivered by this team at events outside New Jersey. It is our own
+          work, shown to evidence what we do rather than where we have done it.
         </p>
       </section>
 
