@@ -217,6 +217,30 @@ export function QuoteForm() {
       });
       // Only a readable 2xx counts as delivered. No opaque "assume success".
       if (!res.ok) throw new Error(`Request failed (${res.status})`);
+
+      // A 2xx is still not proof of delivery. FormSubmit answers 200 with
+      // {"success":"false"} when the destination address has never been
+      // confirmed — and the old code read that as success, pushed the visitor
+      // to /thank-you and fired generate_lead while the lead was dropped on
+      // the floor. A visible failure is far better than a silent one.
+      //
+      // Only an explicit failure flag counts against us: a Worker or CRM may
+      // legitimately answer with an empty body or an entirely different shape,
+      // and neither should be treated as a rejection.
+      const body: unknown = await res.json().catch(() => null);
+      if (body && typeof body === "object") {
+        const { success, message } = body as {
+          success?: unknown;
+          message?: unknown;
+        };
+        if (success === false || success === "false") {
+          throw new Error(
+            typeof message === "string" && message
+              ? message
+              : "The lead endpoint rejected the submission.",
+          );
+        }
+      }
       try {
         (
           window as unknown as { gtag?: (...args: unknown[]) => void }
