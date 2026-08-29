@@ -49,13 +49,22 @@ CheckCherry one does not.
 the footer, on Contact, in the Organization schema, and is the fallback
 destination for the quote form.
 
-> **One action needed before the form delivers anything.** With no Cloudflare
-> Worker or CRM webhook configured, the quote form posts to FormSubmit at
-> `formsubmit.co/ajax/newjerseyphotoactivations@gmail.com`. FormSubmit requires
-> a one-time confirmation of any new address: **the first submission sends an
-> activation email to that inbox, and nothing is delivered until you click the
-> link in it.** Submit the form once yourself and confirm, or enquiries will
-> vanish silently. Worth testing end to end either way.
+> **Delivery confirmed end to end, 29 Aug 2026.** With no Cloudflare Worker or
+> CRM webhook configured, the quote form posts to FormSubmit at
+> `formsubmit.co/ajax/newjerseyphotoactivations@gmail.com`. FormSubmit requires a
+> one-time confirmation of any new address, and that has now been done: a test
+> enquiry was submitted through the live form and **arrived in the inbox**.
+>
+> Two things came out of that test and both are fixed:
+>
+> 1. The address is activated, so enquiries now deliver.
+> 2. The form used to treat any 2xx as delivered. FormSubmit answers `200` with
+>    `{"success":"false"}` for an unconfirmed address, so an undelivered lead
+>    still pushed the visitor to `/thank-you` and fired a `generate_lead`
+>    conversion. The form now reads the response body and fails visibly instead.
+>
+> Re-test after any change to the delivery endpoint — this is the one part of
+> the site that can fail without anyone noticing.
 
 A Gmail address rather than one on the domain is the right call for now — the
 domain's SPF record is `v=spf1 -all`, so it cannot send mail at all until that
