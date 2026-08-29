@@ -49,6 +49,8 @@ export const metadata: Metadata = {
     ],
   },
   twitter: { card: "summary_large_image" },
+  // Emitted only once the token is set — see SITE.gscVerification.
+  verification: { google: SITE.gscVerification || undefined },
 };
 
 export default function RootLayout({

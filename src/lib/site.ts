@@ -45,6 +45,15 @@ export const SITE = {
   gaMeasurementId:
     process.env.NEXT_PUBLIC_GA_ID || "G-GLTGV3RLRW",
   /**
+   * Google Search Console ownership token: the bare `content` value from the
+   * HTML-tag verification method, not the whole <meta> element.
+   *
+   * Empty renders no tag at all, which is the right default — a blank
+   * verification tag is worse than none. Set it as an Actions variable so the
+   * property can be verified without a code change, exactly like the domain.
+   */
+  gscVerification: process.env.NEXT_PUBLIC_GSC_VERIFICATION || "",
+  /**
    * Decision 3: this is a distinct brand, so it carries no rating and no
    * review schema of its own. The credibility is borrowed openly and
    * attributed to the parent business rather than claimed here.

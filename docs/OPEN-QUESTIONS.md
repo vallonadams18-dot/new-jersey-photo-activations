@@ -144,18 +144,39 @@ and entirely yours. I will not invent one to shortcut it.
 
 ---
 
-## 9. Analytics and Search Console — now unblocked
+## 9. Analytics done. Search Console needs one token from you.
 
-**Currently:** the quote form fires a `generate_lead` event if `gtag` is present,
-but no analytics property is installed and no Search Console verification token
-is set.
+**GA4 is live.** Property `G-GLTGV3RLRW`, loaded on every page and confirmed on
+the deployed site. It is a property of its own, so New Jersey traffic is never
+mixed into Brooklyn's reporting, and it is what makes the quote form's
+`generate_lead` conversion event actually fire.
 
-The domain is live, so this is the highest-value remaining item: until the
-sitemap is submitted, Google has no particular reason to crawl a brand-new
-domain quickly.
+**`robots.txt` and `sitemap.xml` are live and correct** — 52 URLs, checked
+against the deployed domain, with the sitemap declared in `robots.txt`.
 
-**Needed:** a GA4 property ID and a Search Console verification token. Both drop
-into `layout.tsx` in a minute. Then submit `/sitemap.xml` — 52 URLs.
+**Search Console is the last piece, and the first step is yours.** The slot is
+wired: `SITE.gscVerification` renders the `google-site-verification` meta tag on
+every page and reads the `NEXT_PUBLIC_GSC_VERIFICATION` Actions variable, so the
+token goes in without a code change. Left empty it renders no tag at all, which
+is deliberate — a blank verification tag is worse than none.
+
+**Needed, in order:**
+
+1. Add `https://www.newjerseyphotoactivations.com/` in Search Console as a
+   **URL-prefix** property, under whichever Google account should own it long
+   term. Brooklyn's property sits under `vallonadams18@gmail.com`.
+2. Pick the **HTML tag** method and send me the `content` value — or set it
+   yourself under *Settings → Secrets and variables → Actions → Variables* as
+   `NEXT_PUBLIC_GSC_VERIFICATION` and re-run the deploy workflow.
+3. Verify, then submit `/sitemap.xml`.
+
+Try this first: Search Console may offer **Google Analytics** as a verification
+method, because the GA4 tag is already on the site. If that same account owns the
+GA4 property it can verify in one click and steps 1–2 collapse to nothing. If the
+option does not appear, fall back to the HTML tag.
+
+Until the property is verified and the sitemap submitted, none of this ranks —
+Google has no particular reason to crawl a brand-new domain quickly.
 
 ---
 

@@ -35,6 +35,7 @@ jobs:
           NEXT_PUBLIC_SITE_EMAIL: ${{ vars.NEXT_PUBLIC_SITE_EMAIL }}
           NEXT_PUBLIC_LEAD_ENDPOINT: ${{ vars.NEXT_PUBLIC_LEAD_ENDPOINT }}
           NEXT_PUBLIC_LEAD_WEBHOOK_URL: ${{ vars.NEXT_PUBLIC_LEAD_WEBHOOK_URL }}
+          NEXT_PUBLIC_GSC_VERIFICATION: ${{ vars.NEXT_PUBLIC_GSC_VERIFICATION }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out
