@@ -91,9 +91,12 @@ export const guides: Guide[] = [
     date: "2026-08-25",
     excerpt:
       "Why two quotes for 'a photo booth' can differ by a factor of three, and which of the variables are worth paying for.",
+    // Landscape on purpose. Guide heroes run in a 21/9 band and the cards in
+    // 16/10; the portrait studio frame that used to sit here lost roughly
+    // two-thirds of the image to the crop.
     heroImg: {
-      src: "/img/studio-booth-hero.jpg",
-      alt: "On-site studio portrait setup with professional lighting",
+      src: "/img/corporate-confetti.jpg",
+      alt: "Guests celebrating at a corporate event photo booth",
     },
     body: [
       {

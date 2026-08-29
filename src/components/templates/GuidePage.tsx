@@ -6,6 +6,7 @@ import { CtaSection } from "@/components/CtaSection";
 import { FaqAccordion } from "@/components/FaqSection";
 import { JsonLd } from "@/components/JsonLd";
 import { MiniCard } from "@/components/ExperienceCard";
+import { focusFor } from "@/lib/images";
 import { Prose } from "@/components/Prose";
 import { SectionHeading } from "@/components/SectionHeading";
 
@@ -56,7 +57,7 @@ export function GuidePage({ guide }: { guide: Guide }) {
               fill
               priority
               sizes="(max-width: 1024px) 100vw, 86rem"
-              className="object-cover"
+              className={`object-cover ${focusFor(guide.heroImg.src, "landscape")}`}
             />
           </div>
         </div>

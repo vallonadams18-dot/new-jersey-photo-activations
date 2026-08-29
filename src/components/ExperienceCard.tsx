@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { Experience } from "@/data/types";
+import { focusFor } from "@/lib/images";
 
 /**
  * Large editorial card. Six of these beat eighteen small ones — the brief was
@@ -21,6 +22,11 @@ export function ExperienceCard({
       prefetch={false}
       className="group flex flex-col overflow-hidden rounded-sharp border border-ivory/8 bg-charcoal transition-colors duration-500 hover:border-champagne/45"
     >
+      {/* Fixed 4/3 on purpose: these cards sit in a grid and must stay a
+          uniform height. The shape cannot flex, so a portrait hero anchors to
+          the top of the frame instead — losing the legs rather than the face.
+          The studio booth is the case that forced this; every photograph it
+          has is portrait. */}
       <div className="relative aspect-[4/3] overflow-hidden">
         <Image
           src={experience.heroImg.src}
@@ -29,7 +35,10 @@ export function ExperienceCard({
           priority={priority}
           loading={priority ? undefined : "lazy"}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover transition-transform duration-[1100ms] ease-out group-hover:scale-[1.05]"
+          className={`object-cover ${focusFor(
+            experience.heroImg.src,
+            "landscape",
+          )} transition-transform duration-[1100ms] ease-out group-hover:scale-[1.05]`}
         />
         <div
           className="absolute inset-0 bg-gradient-to-t from-obsidian/85 via-obsidian/10 to-transparent"

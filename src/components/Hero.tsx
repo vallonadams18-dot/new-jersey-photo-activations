@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { focusFor } from "@/lib/images";
 import { Breadcrumbs, type Crumb } from "./Breadcrumbs";
 import { CtaButton, GhostButton } from "./Button";
 
@@ -30,13 +31,16 @@ export function Hero({
   return (
     <section className="relative overflow-hidden bg-obsidian">
       <div className="absolute inset-0">
+        {/* A hero is always wider than it is tall, so a portrait photograph
+            anchors to the top rather than the middle — the subject's face
+            survives the crop instead of being cut out of the band entirely. */}
         <Image
           src={image.src}
           alt={image.alt}
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center"
+          className={`object-cover ${focusFor(image.src, "landscape")}`}
         />
         {/* Two stacked scrims: a vertical one to seat the type, and the dark
             luxury gradient to keep the whole frame in the palette. */}

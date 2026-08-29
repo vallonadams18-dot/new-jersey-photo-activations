@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import type { Experience } from "@/data/types";
 import { resolveExperiences } from "@/data";
 import { experienceInline } from "@/data/experience-inline";
+import { aspectFor } from "@/lib/images";
 import { NAV_LOCATIONS } from "@/lib/site";
 import {
   breadcrumbJsonLd,
@@ -83,14 +84,29 @@ export function ExperiencePage({ experience }: { experience: Experience }) {
               <Fragment key={block.heading}>
                 <Prose blocks={[block]} />
                 {inline[i] && (
-                  <figure className="group relative aspect-[3/2] overflow-hidden rounded-sharp border border-ivory/10">
+                  // Nothing constrains these figures to a single shape, so they
+                  // take the shape of the photograph. Forcing 3/2 on the
+                  // portrait frames — most of the studio, mirror and vogue work
+                  // — cut the subjects off at the head and the knees. Portrait
+                  // figures are capped in width so a tall frame does not swallow
+                  // the column.
+                  <figure
+                    className={`group relative overflow-hidden rounded-sharp border border-ivory/10 ${aspectFor(
+                      inline[i].src,
+                      {
+                        portrait: "mx-auto w-full max-w-md aspect-[4/5]",
+                        square: "mx-auto w-full max-w-lg aspect-square",
+                        landscape: "aspect-[3/2]",
+                      },
+                    )}`}
+                  >
                     <Image
                       src={inline[i].src}
                       alt={inline[i].alt}
                       fill
                       loading="lazy"
                       sizes="(max-width: 1024px) 100vw, 55vw"
-                      className="object-cover transition-transform duration-[1100ms] ease-out group-hover:scale-[1.03]"
+                      className="object-cover object-center transition-transform duration-[1100ms] ease-out group-hover:scale-[1.03]"
                     />
                   </figure>
                 )}

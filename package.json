@@ -7,8 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "prebuild": "node scripts/fix-logo-transparency.mjs && node scripts/strip-watermarks.mjs && node scripts/check-image-quality.mjs && node scripts/build-image-variants.mjs",
-    "check:images": "node scripts/check-image-quality.mjs"
+    "prebuild": "node scripts/fix-logo-transparency.mjs && node scripts/strip-watermarks.mjs && node scripts/check-image-quality.mjs && node scripts/build-image-variants.mjs && node scripts/build-image-manifest.mjs",
+    "check:images": "node scripts/check-image-quality.mjs",
+    "audit:images": "node scripts/audit-image-orientation.mjs"
   },
   "dependencies": {
     "@next/third-parties": "^16.3.2",

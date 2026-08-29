@@ -6,6 +6,7 @@ import { CtaSection } from "@/components/CtaSection";
 import { JsonLd } from "@/components/JsonLd";
 import { PageHeader } from "@/components/Hero";
 import { guides } from "@/data";
+import { focusFor } from "@/lib/images";
 import { breadcrumbJsonLd, collectionPageJsonLd } from "@/lib/jsonld";
 import { pageMeta } from "@/lib/metadata";
 
@@ -45,7 +46,7 @@ export default function GuidesIndex() {
                   priority={i < 3}
                   loading={i < 3 ? undefined : "lazy"}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-[1100ms] ease-out group-hover:scale-[1.05]"
+                  className={`object-cover ${focusFor(guide.heroImg.src, "landscape")} transition-transform duration-[1100ms] ease-out group-hover:scale-[1.05]`}
                 />
                 <div
                   className="absolute inset-0 bg-gradient-to-t from-obsidian/80 to-transparent"

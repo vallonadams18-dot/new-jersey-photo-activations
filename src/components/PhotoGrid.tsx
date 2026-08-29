@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Img } from "@/data/types";
+import { focusFor, landscapeFirst } from "@/lib/images";
 
 /**
  * Editorial image grid. Deliberately few, large images rather than a dense
@@ -14,9 +15,14 @@ export function PhotoGrid({
   className?: string;
 }) {
   if (!images.length) return null;
+  // The feature slot below is locked to landscape by its row/column span, so
+  // give it a landscape photograph when the set contains one. Sets that are
+  // entirely portrait — the studio booth, for instance — come back unchanged
+  // and rely on the top-anchored crop instead.
+  const ordered = landscapeFirst(images);
   return (
     <div className={`grid gap-3 sm:grid-cols-2 lg:grid-cols-3 ${className}`}>
-      {images.map((img, i) => (
+      {ordered.map((img, i) => (
         <div
           key={img.src}
           className={`group relative overflow-hidden rounded-sharp bg-charcoal ${
@@ -35,7 +41,10 @@ export function PhotoGrid({
                 ? "(max-width: 640px) 100vw, (max-width: 1024px) 66vw, 50vw"
                 : "(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 25vw"
             }
-            className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
+            className={`object-cover ${focusFor(
+              img.src,
+              i === 0 ? "landscape" : "portrait",
+            )} transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]`}
           />
         </div>
       ))}
