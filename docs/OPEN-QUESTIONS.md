@@ -144,39 +144,32 @@ and entirely yours. I will not invent one to shortcut it.
 
 ---
 
-## 9. Analytics done. Search Console needs one token from you.
+## 9. ~~Analytics and Search Console~~ — DONE, 29 Aug 2026
 
-**GA4 is live.** Property `G-GLTGV3RLRW`, loaded on every page and confirmed on
-the deployed site. It is a property of its own, so New Jersey traffic is never
-mixed into Brooklyn's reporting, and it is what makes the quote form's
-`generate_lead` conversion event actually fire.
+**GA4:** property `G-GLTGV3RLRW`, live on every page.
 
-**`robots.txt` and `sitemap.xml` are live and correct** — 52 URLs, checked
-against the deployed domain, with the sitemap declared in `robots.txt`.
+**Search Console:** URL-prefix property `https://www.newjerseyphotoactivations.com/`,
+**ownership verified** by HTML tag, under `hello@mirrormebrooklyn.com` — the
+account that also holds the Flower Walls New Jersey property and the Business
+Profile.
 
-**Search Console is the last piece, and the first step is yours.** The slot is
-wired: `SITE.gscVerification` renders the `google-site-verification` meta tag on
-every page and reads the `NEXT_PUBLIC_GSC_VERIFICATION` Actions variable, so the
-token goes in without a code change. Left empty it renders no tag at all, which
-is deliberate — a blank verification tag is worse than none.
+**Sitemap submitted 29 Aug 2026:** `/sitemap.xml`, status *Success*, 52 pages
+discovered on the first read.
 
-**Needed, in order:**
+The token lives in `SITE.gscVerification` and renders on all 55 pages.
+`NEXT_PUBLIC_GSC_VERIFICATION` still overrides it if it ever needs rotating.
 
-1. Add `https://www.newjerseyphotoactivations.com/` in Search Console as a
-   **URL-prefix** property, under whichever Google account should own it long
-   term. Brooklyn's property sits under `vallonadams18@gmail.com`.
-2. Pick the **HTML tag** method and send me the `content` value — or set it
-   yourself under *Settings → Secrets and variables → Actions → Variables* as
-   `NEXT_PUBLIC_GSC_VERIFICATION` and re-run the deploy workflow.
-3. Verify, then submit `/sitemap.xml`.
+> **Do not remove that meta tag.** Google re-checks it after verification; taking
+> it out silently un-verifies the property. Search Console suggests adding a
+> second method under *Settings → Ownership verification* as insurance — worth
+> doing, not urgent.
 
-Try this first: Search Console may offer **Google Analytics** as a verification
-method, because the GA4 tag is already on the site. If that same account owns the
-GA4 property it can verify in one click and steps 1–2 collapse to nothing. If the
-option does not appear, fall back to the HTML tag.
+The Google Analytics verification method does **not** work on this site and is
+not worth retrying: it requires the tracking snippet in `<head>`, and
+`@next/third-parties` injects gtag into `<body>` after hydration.
 
-Until the property is verified and the sitemap submitted, none of this ranks —
-Google has no particular reason to crawl a brand-new domain quickly.
+Indexing is now Google's move. Nothing more to do here but wait and watch
+Performance.
 
 ---
 
