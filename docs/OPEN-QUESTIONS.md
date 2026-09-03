@@ -44,7 +44,7 @@ CheckCherry one does not.
 
 ---
 
-## 3. Email — set. Phone still open.
+## 3. Email and phone — both set.
 
 **Email:** `newjerseyphotoactivations@gmail.com`, set 25 Aug 2026. It appears in
 the footer, on Contact, in the Organization schema, and is the fallback
@@ -71,9 +71,16 @@ A Gmail address rather than one on the domain is the right call for now — the
 domain's SPF record is `v=spf1 -all`, so it cannot send mail at all until that
 changes.
 
-**Phone still open.** Currently `(917) 724-6051` — the parent business's number.
-Correct, but a dedicated New Jersey number would let you attribute calls to this
-site. One line in `site.ts` whenever you have one.
+**Phone: set 29 Aug 2026.** `(609) 640-3957` — a dedicated line on a New Jersey
+area code, replacing the parent business's `(917)` number, which no longer
+appears anywhere on this site. Calls originating here can now be attributed to
+this site rather than to Brooklyn.
+
+Worth knowing how it is wired: `PHONE_E164` in [`site.ts`](../src/lib/site.ts) is
+the single source of truth for the dialled form, and both the `tel:` href and the
+`telephone` field in the Organization schema derive from it. The schema used to
+carry its own hardcoded copy — which is precisely how a site ends up publishing a
+line nobody answers. If the number changes again, change that one constant.
 
 ---
 
@@ -161,12 +168,16 @@ and entirely yours. I will not invent one to shortcut it.
 **Search Console:** URL-prefix property `https://www.newjerseyphotoactivations.com/`,
 **ownership verified** by HTML tag.
 
-> **Registered under the wrong Google account.** It was created from the account
-> that happened to be signed in, not `newjerseyphotoactivations@gmail.com`. This
-> brand keeps its own accounts, so the property should move: add the New Jersey
-> address as an owner, confirm it, then remove the other account. The
-> verification token is a property of the site, not the account, so moving
-> ownership does not change it and does not re-trigger verification.
+> **Owned by the parent business's Google account, and that is intentional.**
+> The property was created from the account already signed in rather than from
+> `newjerseyphotoactivations@gmail.com`; when raised, the owner confirmed 29 Aug
+> 2026 that this is fine and should stay as it is. Search Console ownership is
+> an internal admin detail and never appears on the site, which is a separate
+> question from the site's own contact details — those are New Jersey's alone.
+>
+> If it ever needs to move: add the New Jersey address as an owner, confirm, then
+> remove the other. The verification token belongs to the site rather than the
+> account, so moving ownership neither changes it nor re-triggers verification.
 
 **Sitemap submitted 29 Aug 2026:** `/sitemap.xml`, status *Success*, 52 pages
 discovered on the first read.

@@ -6,6 +6,17 @@
  * `SITE.url`, so pointing the site at its final domain is a one-line change
  * (or an Actions variable) rather than a find-and-replace.
  */
+
+/**
+ * The dialled form of the phone number, in E.164.
+ *
+ * Kept as its own constant because more than one place needs the machine
+ * readable version — the `tel:` href and the Organization schema — and the
+ * schema previously carried a second hardcoded copy. One literal means the
+ * number a visitor reads and the number their phone dials cannot diverge.
+ */
+const PHONE_E164 = "+16096403957";
+
 export const SITE = {
   name: "New Jersey Photo Activations",
   legalName: "New Jersey Photo Activations",
@@ -30,8 +41,14 @@ export const SITE = {
    */
   email:
     process.env.NEXT_PUBLIC_SITE_EMAIL || "newjerseyphotoactivations@gmail.com",
-  phone: "(917) 724-6051",
-  phoneHref: "tel:+19177246051",
+  /**
+   * The dedicated New Jersey line, set 29 Aug 2026, replacing the parent
+   * business's number. Its own 609 number means calls originating from this
+   * site can finally be attributed to it.
+   */
+  phone: "(609) 640-3957",
+  phoneE164: PHONE_E164,
+  phoneHref: `tel:${PHONE_E164}`,
   instagram: "https://www.instagram.com/magicmirrorbk/",
   /**
    * GA4 property for this domain — separate from the parent business's, so

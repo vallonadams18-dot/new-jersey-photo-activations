@@ -23,7 +23,9 @@ export function organizationJsonLd(): JsonLd {
     legalName: SITE.legalName,
     url: SITE.url,
     email: SITE.email,
-    telephone: "+1-917-724-6051",
+    // Derived, never a second literal: a hardcoded copy here is exactly how
+    // the schema ends up advertising a line the business no longer answers.
+    telephone: SITE.phoneE164,
     logo: `${SITE.url}/img/logo.png`,
     image: `${SITE.url}/img/og.jpg`,
     description:
