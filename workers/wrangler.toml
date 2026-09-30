@@ -1,0 +1,38 @@
+# Cloudflare Worker config for the New Jersey lead endpoint.
+#
+# Nothing secret belongs in this file — it is committed. Secrets go in via
+# `wrangler secret put <NAME>`, which stores them on Cloudflare's side.
+#
+# FIRST-TIME SETUP (see workers/README.md for the full walkthrough):
+#
+#   npx wrangler login
+#   npx wrangler kv namespace create LEAD_LOG
+#   npx wrangler kv namespace create RATE_KV
+#   # paste the two returned ids below, replacing PASTE_..._ID
+#   npx wrangler secret put LEAD_WEBHOOK
+#   npx wrangler secret put ADMIN_TOKEN
+#   npx wrangler deploy
+#
+name = "njpa-lead"
+main = "lead-worker.js"
+compatibility_date = "2026-09-29"
+
+[vars]
+# The only origin allowed to POST here. Keep this exact — a wildcard would let
+# any site on the internet fill the lead log with rubbish.
+ALLOWED_ORIGIN = "https://www.newjerseyphotoactivations.com"
+
+[[kv_namespaces]]
+binding = "LEAD_LOG"
+id = "PASTE_LEAD_LOG_ID"
+
+[[kv_namespaces]]
+binding = "RATE_KV"
+id = "PASTE_RATE_KV_ID"
+
+# Secrets, set with `wrangler secret put` rather than declared here:
+#
+#   LEAD_WEBHOOK           primary delivery URL
+#   LEAD_WEBHOOK_FALLBACK  optional second target, tried when the primary fails
+#   ADMIN_TOKEN            long random string, required to read /leads back
+#   TURNSTILE_SECRET       optional; only if the form gets a Turnstile widget

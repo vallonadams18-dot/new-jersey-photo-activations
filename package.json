@@ -9,7 +9,8 @@
     "lint": "eslint",
     "prebuild": "node scripts/fix-logo-transparency.mjs && node scripts/strip-watermarks.mjs && node scripts/check-image-quality.mjs && node scripts/build-image-variants.mjs && node scripts/build-image-manifest.mjs",
     "check:images": "node scripts/check-image-quality.mjs",
-    "audit:images": "node scripts/audit-image-orientation.mjs"
+    "audit:images": "node scripts/audit-image-orientation.mjs",
+    "test:worker": "node --test workers/lead-worker.test.mjs"
   },
   "dependencies": {
     "@next/third-parties": "^16.3.2",
