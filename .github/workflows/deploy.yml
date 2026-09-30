@@ -23,8 +23,13 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      # `npm ci`, not `npm install`: it installs exactly what the lockfile pins
+      # and fails loudly when the lockfile and package.json have drifted. Plain
+      # `npm install` is free to resolve newer versions inside the caret ranges,
+      # which is how a commit that built in September stops building in October
+      # with nobody having touched the code.
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - name: Build static site
         run: npm run build
         env:
