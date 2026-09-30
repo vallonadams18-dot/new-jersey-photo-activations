@@ -135,11 +135,52 @@ export function captureAttribution() {
   }
 }
 
+/**
+ * Turns a failed submission into an email the guest can send in one click,
+ * with everything they typed already written into the body.
+ *
+ * The delivery endpoint is a third party and it does go down — on 29 Sep 2026
+ * it returned 500 for hours. Without this, the fallback is asking someone who
+ * has just filled in eleven fields to retype all of it into their mail client,
+ * and almost nobody does. The enquiry is the thing worth saving here, not the
+ * submission mechanism.
+ *
+ * Only the guest's own answers go in. Attribution and internal fields are
+ * deliberately left out: this is a message a human is about to read and send.
+ */
+const RESCUE_FIELDS: ReadonlyArray<readonly [string, string]> = [
+  ["name", "Name"],
+  ["company", "Company"],
+  ["email", "Email"],
+  ["phone", "Phone"],
+  ["eventDate", "Event date"],
+  ["eventType", "Event type"],
+  ["county", "Where in New Jersey"],
+  ["venueZip", "Venue ZIP"],
+  ["experience", "Experience"],
+  ["guestCount", "Approx. guests"],
+  ["message", "Notes"],
+];
+
+function rescueMailto(lead: Record<string, unknown>): string {
+  const body = RESCUE_FIELDS.map(
+    ([key, label]) => [label, String(lead[key] ?? "").trim()] as const,
+  )
+    .filter(([, value]) => value !== "")
+    .map(([label, value]) => `${label}: ${value}`)
+    .join("\n");
+  return `mailto:${SITE.email}?subject=${encodeURIComponent(
+    "Quote request — New Jersey Photo Activations",
+  )}&body=${encodeURIComponent(body)}`;
+}
+
 export function QuoteForm() {
   const router = useRouter();
   const [errors, setErrors] = useState<FieldErrors>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
-  const statusRef = useRef<HTMLParagraphElement>(null);
+  // Built only when a submission fails, from the values that failed to send.
+  const [rescueHref, setRescueHref] = useState<string | null>(null);
+  const statusRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     captureAttribution();
@@ -250,6 +291,9 @@ export function QuoteForm() {
       }
       router.push("/thank-you");
     } catch {
+      // Keep the enquiry alive: the guest can send exactly what they typed as
+      // an ordinary email, or call, without filling anything in a second time.
+      setRescueHref(rescueMailto(lead));
       setStatus("error");
       statusRef.current?.focus();
     }
@@ -427,22 +471,50 @@ export function QuoteForm() {
 
       <div aria-live="polite">
         {status === "error" && (
-          <p
+          <div
             ref={statusRef}
             role="alert"
             tabIndex={-1}
-            className="flex items-start gap-3 rounded-sharp border-2 border-[#ff9e80] bg-[#ff9e80]/12 px-4 py-4 text-[15px] font-medium leading-snug text-[#ff9e80]"
+            className="rounded-sharp border-2 border-[#ff9e80] bg-[#ff9e80]/12 px-4 py-4 text-[15px] font-medium leading-snug text-[#ff9e80]"
           >
-            <AlertCircle className="mt-0.5 size-5 shrink-0" aria-hidden="true" />
-            <span>
-            Something went wrong and your message was not delivered. Please try
-            again, or email us directly at{" "}
-            <a href={`mailto:${SITE.email}`} className="font-medium underline">
-              {SITE.email}
-            </a>
-            .
-            </span>
-          </p>
+            <p className="flex items-start gap-3">
+              <AlertCircle
+                className="mt-0.5 size-5 shrink-0"
+                aria-hidden="true"
+              />
+              <span>
+                We could not send that just now — the problem is on our side,
+                not yours. Your answers are still here, so nothing is lost.
+              </span>
+            </p>
+            {/* Two ways out that do not depend on the endpoint that just
+                failed. The email option carries everything already typed, so
+                nobody has to fill the form in twice. */}
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+              {rescueHref && (
+                <a
+                  href={rescueHref}
+                  className="inline-flex items-center justify-center gap-2 rounded-sharp bg-[#ff9e80] px-4 py-2.5 text-[14px] font-medium text-obsidian transition-opacity hover:opacity-90"
+                >
+                  Send this as an email instead
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </a>
+              )}
+              <a
+                href={SITE.phoneHref}
+                className="inline-flex items-center justify-center gap-2 rounded-sharp border border-[#ff9e80] px-4 py-2.5 text-[14px] font-medium text-[#ff9e80] transition-colors hover:bg-[#ff9e80]/10"
+              >
+                Call {SITE.phone}
+              </a>
+            </div>
+            <p className="mt-3 text-[13px] font-normal opacity-90">
+              Or try again in a moment — or write to{" "}
+              <a href={`mailto:${SITE.email}`} className="underline">
+                {SITE.email}
+              </a>
+              .
+            </p>
+          </div>
         )}
       </div>
 
