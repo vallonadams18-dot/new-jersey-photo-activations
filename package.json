@@ -10,7 +10,10 @@
     "prebuild": "node scripts/fix-logo-transparency.mjs && node scripts/strip-watermarks.mjs && node scripts/check-image-quality.mjs && node scripts/build-image-variants.mjs && node scripts/build-image-manifest.mjs",
     "check:images": "node scripts/check-image-quality.mjs",
     "audit:images": "node scripts/audit-image-orientation.mjs",
-    "test:worker": "node --test workers/lead-worker.test.mjs"
+    "test:worker": "node --test workers/lead-worker.test.mjs",
+    "worker:login": "wrangler login",
+    "worker:deploy": "wrangler deploy --config workers/wrangler.toml",
+    "worker:secret": "wrangler secret put --config workers/wrangler.toml"
   },
   "dependencies": {
     "@next/third-parties": "^16.3.2",
@@ -28,6 +31,7 @@
     "eslint-config-next": "16.3.1",
     "sharp": "^0.35.3",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.148.0"
   }
 }
