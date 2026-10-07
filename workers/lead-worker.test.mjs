@@ -240,3 +240,179 @@ test("/leads returns leads, and can filter to the undelivered ones", async () =>
   assert.equal(missed.count, 1);
   assert.equal(missed.leads[0].email, "second@example.com");
 });
+
+// ---------------------------------------------------------------------------
+// Check Cherry delivery
+//
+// The guest never sees Check Cherry: they fill in this site's own form and the
+// lead is pushed through the API from the Worker. These cover the mapping and
+// the fall-through, because a wrong mapping fails as a 422 at the far end where
+// nobody is watching.
+// ---------------------------------------------------------------------------
+
+const CC_KEY = "ik_test_key_do_not_use";
+
+/** Captures what was sent to the Check Cherry API. */
+function captureCC(respond = () => new Response("{}", { status: 200 })) {
+  const calls = [];
+  return {
+    calls,
+    impl: (url, init) => {
+      if (String(url).includes("checkcherry")) {
+        calls.push({
+          url: String(url),
+          apiKey: init?.headers?.["Api-Key"],
+          body: JSON.parse(init.body),
+        });
+        return respond();
+      }
+      return ok();
+    },
+  };
+}
+
+test("Check Cherry: lead is mapped onto the API's field names", async () => {
+  const env = makeEnv({ CHECKCHERRY_API_KEY: CC_KEY });
+  const cc = captureCC();
+  const res = await withFetch(cc.impl, () =>
+    worker.fetch(
+      post({
+        ...VALID,
+        company: "Whitfield Events",
+        eventType: "Corporate event",
+        county: "Hudson",
+        experience: "Glambot",
+        guestCount: "140",
+      }),
+      env,
+    ),
+  );
+
+  assert.deepEqual(await res.json(), { ok: true, delivered: true });
+  assert.equal(cc.calls.length, 1);
+
+  const { url, apiKey, body } = cc.calls[0];
+  assert.equal(url, "https://api.checkcherry.com/api/v1/leads");
+  assert.equal(apiKey, CC_KEY, "the key travels as an Api-Key header");
+
+  assert.equal(body.email, "dana@example.com");
+  assert.equal(body.first_name, "Dana");
+  assert.equal(body.last_name, "Whitfield");
+  assert.equal(body.phone, "6095550142");
+  assert.equal(body.company_name, "Whitfield Events");
+  assert.equal(body.event_date, "2026-12-12");
+  assert.equal(body.estimated_number_guests, 140, "sent as a number, not a string");
+  assert.equal(body.venue_zip, "07030");
+  assert.equal(body.venue_state, "NJ");
+  assert.equal(body.lead_source, "newjerseyphotoactivations.com");
+  assert.equal(body.lead_type, "Corporate event");
+
+  assert.match(body.notes, /Hudson/, "county is kept as sales context");
+  assert.match(body.notes, /Glambot/, "so is the experience they asked about");
+
+  const [lead] = await storedLeads(env);
+  assert.equal(lead.deliveredVia, "checkcherry");
+});
+
+test("Check Cherry: a one-word name does not invent a surname", async () => {
+  const env = makeEnv({ CHECKCHERRY_API_KEY: CC_KEY });
+  const cc = captureCC();
+  await withFetch(cc.impl, () =>
+    worker.fetch(post({ ...VALID, name: "Cher" }), env),
+  );
+  assert.equal(cc.calls[0].body.first_name, "Cher");
+  assert.equal(cc.calls[0].body.last_name, undefined);
+});
+
+test("Check Cherry: a multi-word surname stays whole", async () => {
+  const env = makeEnv({ CHECKCHERRY_API_KEY: CC_KEY });
+  const cc = captureCC();
+  await withFetch(cc.impl, () =>
+    worker.fetch(post({ ...VALID, name: "Marisol Reyes Vega" }), env),
+  );
+  assert.equal(cc.calls[0].body.first_name, "Marisol");
+  assert.equal(cc.calls[0].body.last_name, "Reyes Vega");
+});
+
+test("Check Cherry: empty fields are omitted, not sent as empty strings", async () => {
+  const env = makeEnv({ CHECKCHERRY_API_KEY: CC_KEY });
+  const cc = captureCC();
+  await withFetch(cc.impl, () =>
+    worker.fetch(
+      post({
+        name: "Solo",
+        email: "solo@example.com",
+        eventDate: "2027-03-01",
+        venueZip: "08540",
+      }),
+      env,
+    ),
+  );
+  const body = cc.calls[0].body;
+  assert.equal(body.company_name, undefined);
+  assert.equal(body.message, undefined);
+  assert.equal(body.estimated_number_guests, undefined);
+  assert.ok(!("phone" in body) || body.phone === undefined);
+  assert.equal(body.email, "solo@example.com", "the one required field survives");
+});
+
+test("Check Cherry: an out-of-state enquiry is not labelled NJ", async () => {
+  const env = makeEnv({ CHECKCHERRY_API_KEY: CC_KEY });
+  const cc = captureCC();
+  await withFetch(cc.impl, () =>
+    worker.fetch(post({ ...VALID, county: "Outside New Jersey" }), env),
+  );
+  assert.equal(cc.calls[0].body.venue_state, undefined);
+});
+
+test("Check Cherry: campaign attribution reaches the pipeline", async () => {
+  const env = makeEnv({ CHECKCHERRY_API_KEY: CC_KEY });
+  const cc = captureCC();
+  await withFetch(cc.impl, () =>
+    worker.fetch(
+      post({
+        ...VALID,
+        utm_source: "google",
+        utm_medium: "cpc",
+        utm_campaign: "nj-360-booth",
+        gclid: "abc123",
+      }),
+      env,
+    ),
+  );
+  const body = cc.calls[0].body;
+  assert.equal(body.utm_source, "google");
+  assert.equal(body.utm_medium, "cpc");
+  assert.equal(body.utm_campaign, "nj-360-booth");
+  assert.equal(body.gclid, "abc123");
+});
+
+test("Check Cherry down: falls through to the webhook, guest unaffected", async () => {
+  const env = makeEnv({ CHECKCHERRY_API_KEY: CC_KEY });
+  const cc = captureCC(() => new Response("upstream boom", { status: 503 }));
+  const res = await withFetch(cc.impl, () => worker.fetch(post(VALID), env));
+
+  assert.deepEqual(await res.json(), { ok: true, delivered: true });
+  const [lead] = await storedLeads(env);
+  assert.equal(lead.deliveredVia, "primary", "the webhook caught it");
+});
+
+test("everything down: lead still stored, both failures recorded", async () => {
+  const env = makeEnv({ CHECKCHERRY_API_KEY: CC_KEY });
+  const res = await withFetch(dead, () => worker.fetch(post(VALID), env));
+
+  assert.deepEqual(await res.json(), { ok: true, delivered: false });
+  const [lead] = await storedLeads(env);
+  assert.match(lead.deliveryError, /checkcherry_500/);
+  assert.match(lead.deliveryError, /primary:/);
+});
+
+test("no Check Cherry key configured: it is skipped silently", async () => {
+  const env = makeEnv();
+  const cc = captureCC();
+  const res = await withFetch(cc.impl, () => worker.fetch(post(VALID), env));
+  assert.equal(cc.calls.length, 0, "no call attempted without a key");
+  assert.deepEqual(await res.json(), { ok: true, delivered: true });
+  const [lead] = await storedLeads(env);
+  assert.equal(lead.deliveredVia, "primary");
+});

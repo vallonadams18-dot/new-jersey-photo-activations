@@ -113,6 +113,114 @@ async function deliver(url, lead) {
   }
 }
 
+/**
+ * Maps one of this site's quote-form submissions onto a Check Cherry lead.
+ *
+ * Check Cherry is the booking pipeline, but nothing about it is ever shown to
+ * a guest: they fill in this site's own form, in this site's own branding, and
+ * the lead is pushed through the API from here. That is the point of doing it
+ * server-side rather than embedding Check Cherry's widget.
+ *
+ * The API key cannot live in the site bundle — the bundle is public, and
+ * anyone could read it and write leads into the pipeline. It belongs here, as
+ * a Worker secret.
+ *
+ * Only `email` is required by the API. Everything else is sent when present and
+ * omitted when not, so a sparse enquiry still creates a lead rather than being
+ * rejected over a field the guest chose not to fill in.
+ */
+function toCheckCherryLead(lead) {
+  const str = (v) => {
+    const s = String(v ?? "").trim();
+    return s === "" ? undefined : s;
+  };
+  const int = (v) => {
+    const n = parseInt(String(v ?? "").replace(/[^\d]/g, ""), 10);
+    return Number.isFinite(n) ? n : undefined;
+  };
+
+  // "Marisol Reyes Vega" -> first "Marisol", last "Reyes Vega". A single word
+  // stays a first name rather than inventing a surname.
+  const whole = str(lead.name) ?? "";
+  const space = whole.indexOf(" ");
+  const first_name = space === -1 ? str(whole) : str(whole.slice(0, space));
+  const last_name = space === -1 ? undefined : str(whole.slice(space + 1));
+
+  // The form's county and chosen experience have no first-class Check Cherry
+  // field. They are real sales context, so they go in the notes rather than
+  // being dropped on the floor.
+  const notes = [
+    lead.county ? `Where in New Jersey: ${str(lead.county)}` : null,
+    lead.experience ? `Experience of interest: ${str(lead.experience)}` : null,
+    lead.source ? `Source: ${str(lead.source)}` : null,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  const outsideNJ = String(lead.county ?? "").toLowerCase().includes("outside");
+
+  const payload = {
+    email: str(lead.email),
+    first_name,
+    last_name,
+    phone: str(lead.phone),
+    company_name: str(lead.company),
+    lead_source: "newjerseyphotoactivations.com",
+    lead_type: str(lead.eventType),
+    subject: lead.eventType
+      ? `Quote request — ${str(lead.eventType)}`
+      : "Quote request — New Jersey Photo Activations",
+    message: str(lead.message),
+    notes: str(notes),
+    event_date: str(lead.eventDate),
+    estimated_number_guests: int(lead.guestCount),
+    venue_zip: str(lead.venueZip),
+    venue_state: lead.venueZip && !outsideNJ ? "NJ" : undefined,
+    // The form already captures these on landing; Check Cherry has first-class
+    // fields for them, so attribution survives all the way into the pipeline.
+    utm_source: str(lead.utm_source),
+    utm_medium: str(lead.utm_medium),
+    utm_campaign: str(lead.utm_campaign),
+    utm_term: str(lead.utm_term),
+    utm_content: str(lead.utm_content),
+    gclid: str(lead.gclid),
+  };
+
+  // Drop the undefined keys so the request body carries only real values.
+  return Object.fromEntries(
+    Object.entries(payload).filter(([, v]) => v !== undefined),
+  );
+}
+
+async function deliverToCheckCherry(env, lead) {
+  if (!env.CHECKCHERRY_API_KEY) return { ok: false, error: "not_configured" };
+  const base = env.CHECKCHERRY_API_BASE || "https://api.checkcherry.com/api/v1";
+  try {
+    const res = await fetch(`${base}/leads`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Api-Key": env.CHECKCHERRY_API_KEY,
+      },
+      body: JSON.stringify(toCheckCherryLead(lead)),
+    });
+    if (!res.ok) {
+      // Keep the reason: a 401 means the key is wrong, a 422 means the mapping
+      // is, and those need very different fixes.
+      let detail = "";
+      try {
+        detail = (await res.clone().text()).slice(0, 300);
+      } catch {
+        /* body unreadable */
+      }
+      return { ok: false, error: `checkcherry_${res.status}`, detail };
+    }
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: String(err) };
+  }
+}
+
 const worker = {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -259,11 +367,32 @@ const worker = {
     }
 
     // ---- Step 2: try to deliver. The lead is already safe. ----
-    let result = await deliver(env.LEAD_WEBHOOK, clean);
-    let via = "primary";
-    if (!result.ok && env.LEAD_WEBHOOK_FALLBACK) {
-      result = await deliver(env.LEAD_WEBHOOK_FALLBACK, clean);
-      via = "fallback";
+    //
+    // Check Cherry first when configured: a lead that lands there is in the
+    // booking pipeline rather than sitting in an inbox waiting to be noticed.
+    // The webhooks stay on as backstops, so one provider having a bad day is
+    // not an outage here — which is exactly what 29 Sep was.
+    //
+    // Targets that are not configured are skipped rather than counted as
+    // failures; a failing target falls through to the next one.
+    const targets = [
+      ["checkcherry", () => deliverToCheckCherry(env, clean)],
+      ["primary", () => deliver(env.LEAD_WEBHOOK, clean)],
+      ["fallback", () => deliver(env.LEAD_WEBHOOK_FALLBACK, clean)],
+    ];
+
+    const attempts = [];
+    let result = { ok: false, error: "no_target_configured" };
+    let via = null;
+    for (const [name, attempt] of targets) {
+      const r = await attempt();
+      if (!r.ok && r.error === "not_configured") continue;
+      attempts.push(`${name}:${r.ok ? "ok" : r.error}`);
+      result = r;
+      if (r.ok) {
+        via = name;
+        break;
+      }
     }
 
     await env.LEAD_LOG.put(
@@ -271,8 +400,10 @@ const worker = {
       JSON.stringify({
         ...clean,
         delivered: result.ok,
-        deliveredVia: result.ok ? via : null,
-        deliveryError: result.ok ? null : result.error,
+        deliveredVia: via,
+        // Every target that was tried and what it said, so a failure is
+        // diagnosable without guessing which hop broke.
+        deliveryError: result.ok ? null : attempts.join(", ") || result.error,
       }),
       { expirationTtl: LEAD_TTL_S },
     );

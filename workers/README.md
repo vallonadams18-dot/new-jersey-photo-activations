@@ -55,6 +55,57 @@ is a reasonable starting value — it goes to the same inbox as today, except th
 now an outage no longer loses anything. If you add a second provider later, set
 it as `LEAD_WEBHOOK_FALLBACK` and the Worker tries it whenever the primary fails.
 
+## Sending leads to Check Cherry
+
+This is the better destination: a lead that lands in Check Cherry is in the
+booking pipeline rather than sitting in an inbox waiting to be noticed.
+
+**Guests never see Check Cherry.** They fill in this site's own form, in this
+site's own branding, and the Worker pushes the lead through Check Cherry's API
+from the server side. No widget, no iframe, no third-party styling, and no
+mention of Check Cherry anywhere on the page. That is the whole reason for doing
+it here rather than embedding their form.
+
+The API key must never go in the site bundle — the bundle is public, and anyone
+reading it could write leads straight into your pipeline. It lives as a Worker
+secret:
+
+1. In Check Cherry: **Manage → Business Settings → Integrations → API Overview**,
+   create an Integration Key with the **`lead_create`** permission. It begins
+   `ik_`.
+2. Set it on the Worker — paste it when prompted, so it is never written to disk
+   or into the repo:
+
+```bash
+npx wrangler secret put CHECKCHERRY_API_KEY
+```
+
+That is all. The Worker tries Check Cherry first, and falls through to
+`LEAD_WEBHOOK` and then `LEAD_WEBHOOK_FALLBACK` if it is unreachable, so an
+outage at any one of them is not an outage for you. With no key set, Check Cherry
+is skipped silently and nothing changes.
+
+**How the form maps onto a Check Cherry lead:**
+
+| Form field | Check Cherry |
+|---|---|
+| name | `first_name` + `last_name` |
+| email | `email` *(the only field they require)* |
+| phone | `phone` |
+| company | `company_name` |
+| eventDate | `event_date` |
+| eventType | `lead_type`, and the `subject` line |
+| guestCount | `estimated_number_guests` |
+| venueZip | `venue_zip`, plus `venue_state: NJ` |
+| message | `message` |
+| county, experience | `notes` — no first-class field, but real sales context |
+| utm_*, gclid | the matching `utm_*` / `gclid` fields |
+
+Every field except `email` is omitted when empty rather than sent blank, so a
+sparse enquiry still creates a lead. Campaign attribution the form captures on
+landing travels all the way into the pipeline, so you can tell which ads produce
+bookings rather than just clicks.
+
 Deploy:
 
 ```bash
